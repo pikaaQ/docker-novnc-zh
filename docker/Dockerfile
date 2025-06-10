@@ -2,13 +2,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN mv /etc/apt/sources.list /etc/apt/source.list.bak
-
-RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse" > /etc/apt/sources.list && \
-    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list
-
 # 设置环境变量，指定语言为中文
 ENV LANG C.UTF-8
 ENV LANGUAGE zh_CN:zh:en
@@ -55,7 +48,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # 安装novnc
-RUN git clone --depth 1 https://githubfast.com/novnc/noVNC.git /opt/noVNC
+RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/noVNC
 #COPY noVNC /opt/noVNC
 
 # 安装中文输入法
@@ -104,6 +97,14 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN mv /etc/apt/sources.list /etc/apt/source.list.bak
+
+RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-security main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list
+
 
 EXPOSE 5901-5910 6080-6090                              
                                                         
