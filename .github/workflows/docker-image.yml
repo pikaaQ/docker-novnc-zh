@@ -1,4 +1,4 @@
-name: 编译镜像
+name: 编译镜像并发布到dockerhub
 
 on:
   workflow_dispatch:
@@ -8,10 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    
+
+    - uses: docker/login-action@v3
+    - name: 登录docker
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASS }}
+
     - uses: actions/checkout@v4
     - name: 编译
       run: |
         cd ./docker 
         export version=$(date +%s)
         docker build . --file Dockerfile --tag pikaaq/vnc:$version
+        docker push pikaaq/vnc:$version
+
+
+
+    
