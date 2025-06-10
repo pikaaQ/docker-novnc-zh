@@ -1,11 +1,8 @@
-name: 编译并上传到dockerhub
+name: 编译镜像
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,9 +10,8 @@ jobs:
     steps:
     
     - uses: actions/checkout@v4
-    - name: 编译并上传
+    - name: 编译
       run: |
         cd ./docker 
         export version=$(date +%s)
         docker build . --file Dockerfile --tag pikaaq/vnc:$version
-        docker push pikaaq/vnc:$version
