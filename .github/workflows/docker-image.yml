@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: 编译并上传到dockerhub
 
 on:
   push:
@@ -7,12 +7,15 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
+    
     steps:
+    
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: cd ./docker && docker build . --file Dockerfile --tag pikaaq/vnc:$(date +%s)
+    - name: 编译并上传
+      run: |
+        cd ./docker 
+        export version=$(date +%s)
+        docker build . --file Dockerfile --tag pikaaq/vnc:$version
+        docker push pikaaq/vnc:$version
