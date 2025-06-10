@@ -5,6 +5,7 @@ docker-novnc-zh是一个中文linux桌面环境docker镜像.主要包含:
 3. 中文环境 + 中文输入法
 4. novnc双向剪切板支持,剪切板中文支持
 5. firefox浏览器(非snap版)
+6. 修改apt源地址
 
 镜像大小1.3G,启动内存400M,浏览器轻度使用内存600M-800M,正常使用建议有2G内存.
 
@@ -13,9 +14,9 @@ docker-novnc-zh是一个中文linux桌面环境docker镜像.主要包含:
 
 ### 打docker包
 
+如果你在墙内进行打包,请使用inside分支. inside分支在最开始就修改了源地址,并使用国内git镜像.
 ```
-cd ./docker
-docker build -t pikaaq/vnc .
+cd ./docker && docker build -t pikaaq/vnc .
 ```
 
 ### 启动脚本
