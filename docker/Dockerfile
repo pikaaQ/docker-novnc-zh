@@ -1,12 +1,6 @@
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# 设置环境变量，指定语言为中文
-ENV LANG C.UTF-8
-ENV LANGUAGE zh_CN:zh:en
-ENV LC_ALL zh_CN.UTF-8
-RUN ln -sf /usr/share/zoneinfo/Asia/Shangehai /etc/localtime
  
 # 安装本地化支持包（根据需要安装）
 RUN apt-get update && apt-get install -y locales && \
@@ -25,10 +19,17 @@ RUN apt-get update && apt-get install -y \
     unzip \
     wget \
     git \
+    tzdata \
     software-properties-common \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# 设置环境变量，指定语言为中文
+ENV LANG zh_CN.UTF-8
+ENV LANGUAGE zh_CN:zh:en
+ENV LC_ALL zh_CN.UTF-8
+RUN ln -sf /usr/share/zoneinfo/Asia/Shangehai /etc/localtime
 
 # 安装桌面和vnc
 RUN apt-get update && apt-get install -y \
