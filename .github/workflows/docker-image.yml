@@ -19,12 +19,14 @@ jobs:
     - name: checkout 
       uses: actions/checkout@v4
 
-    - name: 编译
+    - name: 编译并发布
       run: |
         cd ./docker 
         export version=$(date +%s)
         docker build . --file Dockerfile --tag pikaaq/vnc:$version
         docker push pikaaq/vnc:$version
+        docker tag pikaaq/vnc:$version pikaaq/vnc:latest
+        docker push pikaaq/vnc:latest
 
 
 
