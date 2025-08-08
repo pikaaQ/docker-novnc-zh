@@ -14,13 +14,18 @@ VNC_PORT=$((${DISPLAY}+5900))
 RESOLUTION=${RESOLUTION:-"1080x720"}
 
 mkdir -p /root/.vnc
-echo $PASSWORD | tightvncpasswd -f > /root/.vnc/passwd
+echo $PASSWORD | tightvncpasswd -f > /root/.vnc/passwd && \
 chmod 600 /root/.vnc/passwd
+
+echo "vnc: 127.0.0.1:${VNC_PORT}\naudio: 127.0.0.1:5711" > /etc/websockify/token.conf 
 
 echo ${DISPLAY}, ${RESOLUTION} ,  ${PORT} , ${VNC_PORT}
 
 autocutsel -fork &
+pulseaudio -k
+pulseaudio --start
+/root/projects/noVNC-audio-plugin/audio-proxy.sh -l 5711 &
 
 vncserver :1 -geometry ${RESOLUTION} -depth 24 && \
-websockify -D --web=/opt/noVNC ${PORT} localhost:${VNC_PORT} && \
+websockify -D --web=/opt/noVNC --token-plugin=TokenFile --token-source=/etc/websockify/token.cfg ${PORT} && \
 tail -f /dev/null

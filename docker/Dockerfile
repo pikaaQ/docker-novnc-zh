@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     wget \
+    curl \
     git \
     tzdata \
     software-properties-common \
@@ -44,6 +45,7 @@ RUN apt-get update && apt-get install -y \
     websockify \
     xfce4-terminal \
     mousepad \
+    tightvncpasswd \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -80,7 +82,10 @@ RUN apt-get update && apt-get install -y \
 #    rm /google-chrome-stable_current_amd64.deb
 
 # 安装firefox(非snap版)
-RUN apt-get update && apt-get install -y gpg gnupg2 --no-install-recommends && \
+RUN apt-get update && apt-get install -y \
+    gpg \
+    gnupg2 \
+    --no-install-recommends && \
     apt-get clean && \                                                          
     rm -rf /var/lib/apt/lists/*                                                 
 
@@ -93,11 +98,25 @@ RUN rm -rf /var/lib/snapd/seed/snaps/firefox_*.snap && \
     apt clean && \                                                                                                                                    
     rm -rf /var/lib/apt/lists/* 
 
-RUN apt-get update && apt-get install -y \
-    tightvncpasswd \
+# 安装音频支持
+RUN apt-get update && apt-get install -y  \
+    pavucontrol \
+    pulseaudio \
+    socat \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
     --no-install-recommends && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean && \                                                          
+    rm -rf /var/lib/apt/lists/* 
+
+RUN git clone --depth 1 https://github.com/pikaaQ/noVNC-audio-plugin.git /opt/noVNC-audio-plugin && \
+    cp /opt/noVNC-audio-plugin/audio-plugin.js /opt/noVNC/ && \
+    sed -i 's/<\/head>/    <script type="module" crossorigin="anonymous" src="audio-plugin.js"><\/script>\n<\/head>/g' /opt/noVNC/vnc.html && \
+    sed -i "s/UI.initSetting('path', 'websockify');/UI.initSetting('path', 'websockify?token=vnc');/g" /opt/noVNC/app/ui.js && \
+    mkdir -p /etc/websockify/ && \
+    echo "load-module module-simple-protocol-tcp listen=127.0.0.1 format=s16le channels=2 rate=48000 record=true playback=false" > /etc/pulse/default.pa.d/simple-protocol.pa
 
 RUN mv /etc/apt/sources.list /etc/apt/source.list.bak
 
@@ -107,8 +126,8 @@ RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted 
     echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse" >> /etc/apt/sources.list
 
 
-EXPOSE 5901-5910 6080-6090                              
-                                                        
+EXPOSE 5901 6080
+
 COPY start.sh /start.sh                                                                                                 
 RUN chmod +x /start.sh                                                                                                                                
                                                                                                                                                       

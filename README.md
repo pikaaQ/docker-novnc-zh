@@ -6,6 +6,7 @@ docker-novnc-zh是一个中文linux桌面环境docker镜像.主要包含:
 4. novnc双向剪切板支持, 剪切板中文支持
 5. firefox浏览器(非snap版)
 6. 修改apt源地址
+7. noVNC增加集成音频，开箱即用
 
 启动内存400M, 浏览器轻度使用内存600M-800M, 正常使用建议有2G内存.
 
