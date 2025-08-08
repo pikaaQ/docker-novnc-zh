@@ -17,7 +17,8 @@ mkdir -p /root/.vnc
 echo $PASSWORD | tightvncpasswd -f > /root/.vnc/passwd && \
 chmod 600 /root/.vnc/passwd
 
-echo "vnc: 127.0.0.1:${VNC_PORT}\naudio: 127.0.0.1:5711" > /etc/websockify/token.conf 
+echo "vnc: 127.0.0.1:${VNC_PORT}
+audio: 127.0.0.1:5711" > /etc/websockify/token.conf 
 
 echo ${DISPLAY}, ${RESOLUTION} ,  ${PORT} , ${VNC_PORT}
 
